@@ -4,7 +4,8 @@
   "description": "web aplication for trading pets and find date for pets",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devst": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -23,8 +24,12 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-validator": "^6.13.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.8",
+    "mongoose": "^6.0.9",
+    "next": "^12.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "validator": "^13.6.0"
   },
   "devDependencies": {

@@ -1,0 +1,33 @@
+"name":"amin",
+"last_name":"meraji",
+"email":"example2@gmail.com",
+"username":"user2",
+"password":"123123",
+"phone":5555556,
+"location":[123,123,"mashhad", "Iran"]
+
+//////////////////
+
+"name":"mayra",
+"species":"dog",
+"race":"germanshepherd",
+"age":1,
+"gender":"female",
+"vaccine_card": true,
+"tags":["whachdog","support"],
+"lng": 111111,
+"lat": 222222,
+"city": "mashhad",
+"country": "iran"
+
+
+//update pet
+    "petID":"61744f294b45244ab0a28f07",
+    "name":"pussy",
+    "species":"cat",
+    "age":2,
+    "tags":"goodcat",
+    "lng":"111111",
+    "lat":111111,
+    "city":"mashhad",
+    "country":"iran"
