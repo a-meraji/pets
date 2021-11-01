@@ -86,12 +86,6 @@ userSchema.statics.uniqUsername = async function (username, email, phone) {
   }
 }
 
-//dev deleted later
-userSchema.statics.findUser = async function(id){
-  const user = await this.findById(id);
-  return user
-}
-
 const User = mongoose.model("user", userSchema);
 
 module.exports = User;

@@ -1,5 +1,6 @@
 const { check, validationResult } = require("express-validator");
 
+//check all field to be valid data
 exports.userUpdate_validate = [
   check("username")
     .isLength({ min: 3 })

@@ -94,11 +94,12 @@ module.exports.checkAuth_get = async (req, res) => {
   const token = req.cookies.jwt;
   const secret = process.env.JWT_SECRET;
   try {
+    //decode and verify token
     const id = await jwtMiddleware.jwtVerifier(token, secret);
     if (id) {
       res.status(200).json({ isValid: true });
     } else if (id === undefined) {
-      res.status(200).json({ isValid: false });
+      throw Error ("user validation failed")
     }
   } catch (err) {
     const errors = handleErrors(err);

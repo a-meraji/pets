@@ -9,10 +9,6 @@ const handleErrors = (err) => {
 
   let errors = { massaga: [] };
 
-  //incorect email
-  if (err.message === "unvalid jwt token") {
-    errors.massaga = "unable to verify user";
-  }
   //incorect petID
   if (err.message === "unvalid petID") {
     errors.massaga = "unable to verify your petID";
@@ -35,6 +31,7 @@ const handleErrors = (err) => {
   return errors;
 };
 
+//craete pet account
 module.exports.createPet_post = async (req, res) => {
   const {
     name,
@@ -54,6 +51,7 @@ module.exports.createPet_post = async (req, res) => {
   const secret = process.env.JWT_SECRET;
 
   try {
+    //decode & verify token
     const ownerID = await jwtMiddleware.jwtVerifier(token, secret);
     if (ownerID) {
       const pet = await Pet.create({
@@ -71,8 +69,8 @@ module.exports.createPet_post = async (req, res) => {
         country,
       });
       res.status(201).json({ created: true });
-    } else {
-      throw Error("unvalid jwt token");
+    }else{
+      throw Error ("user validation failed")
     }
   } catch (err) {
     const error = handleErrors(err);
@@ -80,6 +78,7 @@ module.exports.createPet_post = async (req, res) => {
   }
 };
 
+// find all pets of the owner by ownerID
 module.exports.readPet_get = async (req, res) => {
   const token = req.cookies.jwt;
   const secret = process.env.JWT_SECRET;
@@ -90,8 +89,8 @@ module.exports.readPet_get = async (req, res) => {
         if (err) throw Error(err);
         res.status(200).json(pets);
       });
-    } else {
-      throw Error("unvalid jwt token");
+    }else{
+      throw Error ("user validation failed")
     }
   } catch (err) {
     const error = handleErrors(err);
@@ -131,6 +130,7 @@ module.exports.petUpdate_post = async (req, res) => {
     country,
   };
 
+  // make an object with valid update values
   locationArr = [lng, lat, city, country];
   locationArr.map((value) => {
     if (value === undefined || value == "") {
@@ -166,7 +166,7 @@ module.exports.petUpdate_post = async (req, res) => {
         updateKeys[key] = keys[key];
       }
     }
-
+    //decode and verify token
     const ownerID = await jwtMiddleware.jwtVerifier(token, secret);
     if (ownerID) {
       Pet.findOneAndUpdate(
@@ -177,8 +177,8 @@ module.exports.petUpdate_post = async (req, res) => {
           res.status(200).json({ docs, update: true });
         }
       );
-    } else {
-      throw Error("unvalid jwt token");
+    }else{
+      throw Error ("user validation failed")
     }
   } catch (err) {
     const error = handleErrors(err);
@@ -186,6 +186,7 @@ module.exports.petUpdate_post = async (req, res) => {
   }
 };
 
+//find nearby users
 module.exports.geoQuery_post = async (req, res) => {
   const { lng, lat } = req.body;
 
@@ -207,6 +208,7 @@ module.exports.geoQuery_post = async (req, res) => {
   }
 };
 
+//search pets
 module.exports.filterQueryPet_get = async (req, res) => {
   try {
     if (Object.keys(req.query).length === 0) {
@@ -229,8 +231,8 @@ module.exports.filterQueryPet_get = async (req, res) => {
       } = req.query;
       regFilters = { city, country, species, gender };
       otherFilters = { race, vaccine_card, tags };
-      console.log(regFilters);
-      let conditions = {};
+      let conditions = {}; // this object will be use for find conditions
+
       //add conditions with regexp
       for (var key in regFilters) {
         if (regFilters.hasOwnProperty(key) && regFilters[key] !== undefined) {
@@ -254,6 +256,7 @@ module.exports.filterQueryPet_get = async (req, res) => {
           }
         }
       }
+
       Pet.find(conditions).exec((err, pets) => {
         if (err) throw Error(err);
         res.status(200).json(pets);
@@ -270,18 +273,20 @@ module.exports.petDelete_delete = async (req, res) => {
   const token = req.cookies.jwt;
   const secret = process.env.JWT_SECRET;
   try {
+    //check if petId is a valid ID
     if (!ObjectId.isValid(petID) || String(new ObjectId(petID)) !== petID) {
       throw Error("unvalid petID");
     }
 
+    //decode and vaify token
     const ownerID = await jwtMiddleware.jwtVerifier(token, secret);
     if (ownerID) {
       Pet.findOneAndRemove({ _id: petID, ownerID: ownerID }, (err, docs) => {
         if (err) throw Error(err);
         res.status(200).json({ deleted: true });
       });
-    } else {
-      throw Error("unvalid jwt token");
+    }else{
+      throw Error ("user validation failed")
     }
   } catch (err) {
     const error = handleErrors(err);

@@ -43,4 +43,3 @@ mongoose.connect(dbURI,{
 .catch((err) => {
   console.log(err);
 });
-//   app.listen(port,()=>console.log(`resver run on ${port}`))
