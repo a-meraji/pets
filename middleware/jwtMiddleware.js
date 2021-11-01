@@ -6,7 +6,7 @@ module.exports.jwtVerifier = async (token, secret) => {
   if (token && secret) {
     id = await jwt.verify(token, secret, (err, decodedToken) => {
       if (err) {
-        throw Error("unvalid jwt token");
+        throw Error("user validation failed");
       } else {
         return decodedToken.id;
       }
